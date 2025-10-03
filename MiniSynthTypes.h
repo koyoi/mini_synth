@@ -50,6 +50,20 @@ constexpr uint8_t kFilterPin = A3;
 constexpr uint8_t kResonancePin = A4;
 
 /**
+ * @brief デジタル入力（鍵盤）ピンの定義。
+ *
+ * 現在は 5 鍵を直接 GPIO から読み取る簡易実装です。将来的にはダイオード付きマトリクススキャンに置き換えます。
+ */
+constexpr uint8_t kKeyPin0 = 2;
+constexpr uint8_t kKeyPin1 = 3;
+constexpr uint8_t kKeyPin2 = 4;
+constexpr uint8_t kKeyPin3 = 5;
+constexpr uint8_t kKeyPin4 = 6;
+
+// キーに割り当てる MIDI ノート番号（C, E, G, A, D の例）
+static const uint8_t kKeyNotes[5] = {60, 64, 67, 69, 62};
+
+/**
  * @brief 10bit ADC の最大値。
  */
 constexpr uint16_t kAdcMax = 1023U;
@@ -97,6 +111,9 @@ struct Voice {
   EnvelopeStage stage = EnvelopeStage::kIdle; //!< 現在のエンベロープステージ。
   uint8_t velocity = 0U;               //!< 受信ベロシティ。
   uint32_t age = 0U;                   //!< 割り当て順序を識別するカウンタ。
+  // SVF 用の軽量状態（VOICE_SVF 使用時に利用）
+  float svf_low = 0.0f;                //!< SVF ロー出力状態
+  float svf_band = 0.0f;               //!< SVF バンド出力状態
 };
 
 /**
@@ -124,6 +141,15 @@ struct SynthState {
 inline HardwareSerial &midiSerial() {
   return Serial1;
 }
+
+// ビルド時に以下のマクロでフィルタ方式を切り替えできます。
+// 定義例:
+// -DGLOBAL_SVF : ミックス後にグローバルな SVF を適用（デフォルト）
+// -DVOICE_SVF  : 各ボイスごとに SVF を持ち、キー追従でカットオフを変化させる
+#ifndef GLOBAL_SVF
+#define GLOBAL_SVF 1
+#endif
+
 
 }  // namespace mini_synth
 

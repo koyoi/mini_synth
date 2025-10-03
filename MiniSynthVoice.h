@@ -55,5 +55,21 @@ void updatePortamento(Voice &voice);
  */
 void updateEnvelope(Voice &voice, int16_t attackStep, int16_t releaseStep);
 
+// --- SVF (State Variable Filter) support ---
+/**
+ * @brief ボイスのSVF状態を初期化する（必要なら）。
+ */
+void initVoiceSVF(Voice &voice);
+
+/**
+ * @brief ボイス単位のSVFを更新し、入力サンプルをフィルタする。
+ * @param voice 対象ボイス
+ * @param input 入力サンプル（float、-32768..32767）
+ * @param f 正規化周波数係数（0..1 相当）
+ * @param q レゾナンス係数
+ * @return フィルタ後の出力（float）
+ */
+float processVoiceSVF(Voice &voice, float input, float f, float q);
+
 }  // namespace mini_synth
 

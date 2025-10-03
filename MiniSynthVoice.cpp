@@ -46,6 +46,8 @@ void initVoice(SynthState &state, Voice &voice, const uint8_t note, const uint8_
   voice.stage = EnvelopeStage::kAttack;
   // age カウンタを更新し、LRU 判定に備える。
   voice.age = ++state.voiceAgeCounter;
+  // per-voice SVF を初期化
+  initVoiceSVF(voice);
 }
 
 Voice *findVoiceByNote(SynthState &state, const uint8_t note) {
@@ -102,6 +104,21 @@ void updateEnvelope(Voice &voice, const int16_t attackStep, const int16_t releas
       // アイドル状態では何もしない。
       break;
   }
+}
+
+// --- SVF 実装（軽量 Chamberlin 型）
+void initVoiceSVF(Voice &voice) {
+  voice.svf_low = 0.0f;
+  voice.svf_band = 0.0f;
+}
+
+float processVoiceSVF(Voice &voice, float input, float f, float q) {
+  // Chamberlin-ish:
+  // hp = input - low - q * band
+  float hp = input - voice.svf_low - q * voice.svf_band;
+  voice.svf_band += f * hp;
+  voice.svf_low += f * voice.svf_band;
+  return voice.svf_low; // lowpass output
 }
 
 }  // namespace mini_synth
