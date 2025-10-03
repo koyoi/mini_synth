@@ -1,9 +1,12 @@
+#include <arduino.h>
+#include <MozziHeadersOnly.h>
+
 #include "MiniSynthOscillator.h"
 
 #include "MiniSynthMozziConfig.h"
 
 #include <mozzi_pgmspace.h>
-#include <tables/sin2048_int16.h>
+#include <tables/sin2048_int8.h>
 
 namespace mini_synth {
 
@@ -28,7 +31,7 @@ OscWaveform analogToWaveform(const uint16_t value) {
 int16_t sineFromTable(const uint16_t phase) {
   // 2048 エントリのテーブルに合わせて位相をスケーリング。
   const uint16_t index = phase >> 5U;
-  return pgm_read_word_near(sin2048_int16 + index);
+  return pgm_read_word_near(SIN2048_DATA + index);
 }
 
 int16_t renderWave(const Voice &voice, const OscWaveform waveform) {

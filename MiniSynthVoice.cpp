@@ -1,3 +1,6 @@
+#include <arduino.h>
+#include <MozziHeadersOnly.h>
+
 #include "MiniSynthVoice.h"
 
 #include "MiniSynthMozziConfig.h"

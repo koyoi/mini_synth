@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "arduino: compile",
+      "type": "shell",
+      "command": "arduino-cli",
+      "args": [
+        "compile",
+        "--fqbn",
+        "${input:fqbn}",
+        "${workspaceFolder}"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

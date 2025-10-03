@@ -22,7 +22,7 @@ void handleControl();
  * @brief 現在の状態からオーディオサンプルを生成する。
  * @return モノラルオーディオ出力。
  */
-AudioOutput<MONO> generateAudio();
+AudioOutput generateAudio();
 
 }  // namespace mini_synth
 

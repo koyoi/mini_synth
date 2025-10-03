@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+  
+    {
+      "type": "cortex-debug",
+      "request": "launch",
+      "name": "Debug STM32F103 (OpenOCD)",
+      "preLaunchTask": "arduino: compile",
+      "executable": "${workspaceFolder}/${input:elfPath}",
+      "servertype": "openocd",
+      "configFiles": [
+        "interface/stlink.cfg",
+        "target/stm32f1x.cfg"
+      ],
+      "device": "STM32F103",
+      "runToEntryPoint": "setup"
+    }
+  ],
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "elfPath",
+      "description": "Path to the compiled ELF file to debug (for example: build/mini_synth.ino.elf)"
+    },
+    {
+      "type": "promptString",
+      "id": "fqbn",
+      "description": "Arduino FQBN to compile for (for example: stm32:stm32:genericSTM32F103C8)"
+    }
+  ]
+}

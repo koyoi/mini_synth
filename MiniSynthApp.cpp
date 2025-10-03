@@ -1,6 +1,7 @@
-#include "MiniSynthApp.h"
+#include <arduino.h>
+#include <MozziHeadersOnly.h>
 
-#include <Mozzi.h>
+#include "MiniSynthApp.h"
 
 #include "MiniSynthMidi.h"
 #include "MiniSynthOscillator.h"
@@ -30,7 +31,7 @@ void updateActiveVoices(const int16_t attackStep, const int16_t releaseStep) {
 }
 }  // namespace
 
-AudioOutput<MONO> generateAudio() {
+AudioOutput generateAudio() {
   int32_t mix = 0;
   for (auto &voice : g_state.voices) {
     if (!voice.active) {
